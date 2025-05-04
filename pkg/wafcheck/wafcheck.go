@@ -79,12 +79,12 @@ func WithTimeout(timeout time.Duration) Option {
 // NewWAFChecker creates a new WAFChecker instance with options
 func NewWAFChecker(options ...Option) *WAFChecker {
 	checker := New()
-	
+
 	// Apply options
 	for _, option := range options {
 		option(checker)
 	}
-	
+
 	return checker
 }
 
@@ -247,7 +247,7 @@ func (w *WAFChecker) CheckByActiveProbing(targetURL string) ([]WAFInfo, error) {
 	}
 
 	var results []WAFInfo
-	
+
 	for _, payload := range payloads {
 		probeURL := targetURL + payload
 		req, err := http.NewRequest("GET", probeURL, nil)
@@ -572,7 +572,7 @@ func (w *WAFChecker) initBypassTechniques() {
 		"Use Unicode normalization evasion",
 		"Try various JSON/XML payload obfuscation techniques",
 	}
-	
+
 	w.bypassTechs[F5BigIP] = []string{
 		"Try parameter name obfuscation",
 		"Use uncommon HTTP headers to deliver payloads",
@@ -582,7 +582,7 @@ func (w *WAFChecker) initBypassTechniques() {
 		"Implement payload chunking across multiple parameters",
 		"Use HTTP/2 protocol features to bypass inspection",
 	}
-	
+
 	w.bypassTechs[ModSecurity] = []string{
 		"Use alternate character encodings",
 		"Try evasion with NULL bytes",

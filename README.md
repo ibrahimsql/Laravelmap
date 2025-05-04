@@ -23,6 +23,7 @@ LaravelMap is a comprehensive security scanning tool specifically designed for L
 
 - **Framework Detection:** Identifies the presence of the Laravel framework on a target web application
 - **Comprehensive Scanning:** Detects common web vulnerabilities with Laravel-specific context
+- **WAF Detection & Bypass:** Identifies and attempts to bypass Web Application Firewalls
 - **Modular Architecture:** Easily extendable with new scanning modules
 - **Performance Optimized:** Written in Go for high-speed concurrent scanning
 - **Detailed Reporting:** Generates reports in multiple formats (JSON, HTML, text)
@@ -35,6 +36,8 @@ LaravelMap is a comprehensive security scanning tool specifically designed for L
 - **Host Header Injection:** Detects if application is vulnerable to Host Header Injection
 - **Livewire Detection:** Determines if the application uses Livewire and identifies version
 - **PHP Version Check:** Extracts the PHP version from headers
+- **WAF Detection:** Identifies presence and type of Web Application Firewalls (Cloudflare, Incapsula, Akamai, etc.)
+- **WAF Bypass Techniques:** Implements various bypass methods to test WAF security
 
 ### Content Analysis
 
@@ -90,13 +93,18 @@ OPTIONS:
     -format <FORMAT>            Output format: text, json, html [default: text]
     -mode <MODE>                Scan mode: passive or active [default: active]
     -risk-level <LEVEL>         Risk level: low, medium, or high [default: medium]
-    -categories <CATEGORIES>    Scan categories to run (comma-separated) [default: all]
+    -categories <CATEGORIES>    Scan categories to run (comma-separated): recon,vulnerabilities,waf [default: all]
     -user-agent <AGENT>         Custom User-Agent header [default: LaravelMap Security Scanner]
     -headers <HEADERS>          Custom HTTP headers (format: 'Header1:Value1,Header2:Value2')
     -cookies <COOKIES>          Custom cookies (format: 'name1=value1,name2=value2')
     -max-depth <DEPTH>          Maximum crawling depth [default: 3]
     -exclude <PATHS>            Paths to exclude from scanning (comma-separated)
     -include <PATHS>            Only scan these paths (comma-separated)
+    -waf-detection              Enable WAF detection [auto-enabled when categories includes 'waf']
+    -waf-bypass                 Attempt to bypass detected WAFs
+    -waf-payload <PAYLOAD>      Payload to use for WAF bypass attempts [default: <script>alert(1)</script>]
+    -waf-random-ua             Use random User-Agent headers for WAF detection/bypass [default: true]
+    -waf-path-mutations        Use path mutations for WAF bypass attempts [default: true]
     -verbose                    Enable verbose output
     -debug                      Enable debug mode
     -version                    Show version information
@@ -110,6 +118,9 @@ OPTIONS:
 
 # Advanced scan with custom options
 ./laravelmap --url https://example.com --threads 10 --categories vulnerabilities --risk-level high --output report.json --format json
+
+# WAF detection and bypass scan
+./laravelmap --url https://example.com --categories waf --waf-bypass --waf-payload "<script>document.cookie=1</script>"
 
 # Scan with authentication
 ./laravelmap --url https://example.com --auth-method form --auth-user admin --auth-pass password
@@ -126,6 +137,7 @@ LaravelMap includes the following modules that can be enabled or disabled as nee
 |-------------|-------------|
 | `recon` | Reconnaissance and information gathering |
 | `vulnerabilities` | Security vulnerability scanning |
+| `waf` | WAF detection and bypass testing |
 | `debug_mode` | Detects if Laravel debug mode is enabled |
 | `log_injection` | Tests for log injection vulnerabilities |
 | `authorization_bypass` | Checks for authorization bypass vulnerabilities |
@@ -233,6 +245,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Sqlmap](https://github.com/sqlmapproject/sqlmap) -  Automatic SQL injection and database takeover tool 
 - [OWASP ZAP](https://github.com/zaproxy/zaproxy) - Web application security scanner
 - [WPScan](https://github.com/wpscanteam/wpscan) - WordPress security scanner.
+- [WAFW00F](https://github.com/EnableSecurity/wafw00f) - Web Application Firewall detection tool
+- [CDNCheck](https://github.com/projectdiscovery/cdncheck) - CDN & WAF IP detection library
 ---
 
 <div align="center">
