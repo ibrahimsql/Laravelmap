@@ -45,6 +45,10 @@ LaravelMap is a comprehensive security scanning tool specifically designed for L
 - **Robots.txt Analysis:** Parse and test restrictions in robots.txt files
 - **Subdomain Enumeration:** Attempts to enumerate common subdomains for the target domain
 - **Technology Fingerprinting:** Identifies web technologies and frameworks in use
+- **Route Discovery:** Detects Laravel routes and endpoints, revealing application structure
+- **API Endpoints Detection:** Discovers API endpoints, documentation, and GraphQL implementations
+- **Config Leakage Scanner:** Identifies exposed configuration files, .env leaks, and other sensitive information
+- **Package Detection:** Analyzes Laravel packages in use and detects potential vulnerabilities based on versions
 
 ## 📦 Installation
 
@@ -94,6 +98,10 @@ OPTIONS:
     -mode <MODE>                Scan mode: passive or active [default: active]
     -risk-level <LEVEL>         Risk level: low, medium, or high [default: medium]
     -categories <CATEGORIES>    Scan categories to run (comma-separated): recon,vulnerabilities,waf [default: all]
+    -route-discovery           Enable route discovery scanning for Laravel routes [auto-enabled when categories includes 'recon']
+    -api-endpoints            Enable API endpoints detection [auto-enabled when categories includes 'recon']
+    -config-leakage           Enable configuration file leakage detection [auto-enabled when categories includes 'recon']
+    -package-detection        Enable Laravel package detection and vulnerability analysis [auto-enabled when categories includes 'recon']
     -user-agent <AGENT>         Custom User-Agent header [default: LaravelMap Security Scanner]
     -headers <HEADERS>          Custom HTTP headers (format: 'Header1:Value1,Header2:Value2')
     -cookies <COOKIES>          Custom cookies (format: 'name1=value1,name2=value2')
@@ -127,6 +135,15 @@ OPTIONS:
 
 # Exclude specific paths
 ./laravelmap --url https://example.com --exclude /admin,/api,/assets
+
+# Focus only on route discovery and API endpoint detection
+./laravelmap --url https://example.com --categories recon --route-discovery --api-endpoints
+
+# Look for configuration leakage with high risk level
+./laravelmap --url https://example.com --config-leakage --risk-level high
+
+# Detect Laravel packages and their vulnerabilities
+./laravelmap --url https://example.com --package-detection --output packages-report.json --format json
 ```
 
 ## 🧩 Modules
@@ -136,6 +153,10 @@ LaravelMap includes the following modules that can be enabled or disabled as nee
 | Module Name | Description |
 |-------------|-------------|
 | `recon` | Reconnaissance and information gathering |
+| `route_discovery` | Identifies Laravel routes and application structure |
+| `api_endpoints` | Discovers API endpoints, documentation pages, and GraphQL implementations |
+| `config_leakage` | Detects exposed configuration files, .env files, logs, and other sensitive info |
+| `package_detection` | Analyzes Laravel packages and detects potential vulnerabilities based on versions |
 | `vulnerabilities` | Security vulnerability scanning |
 | `waf` | WAF detection and bypass testing |
 | `debug_mode` | Detects if Laravel debug mode is enabled |
